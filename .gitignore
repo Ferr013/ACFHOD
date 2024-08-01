@@ -1,0 +1,5 @@
+*pycache*
+.DS_Store
+*.txt
+*.data
+*.h5
