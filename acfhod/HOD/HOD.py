@@ -5,16 +5,11 @@ import numpy as np
 from tqdm.notebook import tqdm
 from scipy import special
 from halomod.bias import Tinker10
-from astropy.cosmology import Planck15
 import acfhod.Utils.Utils as utils
 
-cosmo = Planck15
-sigma_8 = 0.8159
+cosmo, sigma_8 = utils.get_cosmology()
 h = cosmo.H(0).value/100
 c_light  = 299792.458 #speed of light km/s
-
-def get_cosmology():
-    return cosmo, sigma_8
 
 ###################################################################################################
 ### HALO OCCUPATION DISTRIBUTION ##################################################################

@@ -6,10 +6,12 @@ import numpy as np
 from hmf import MassFunction
 import gzip
 import acfhod.HOD.HOD as HOD
-
-cosmo, sigma_8 = HOD.get_cosmology()
+from astropy.cosmology import Planck15
+cosmo = Planck15
+sigma_8 = 0.8159
 h = cosmo.H(0).value/100
-
+def get_cosmology():
+    return cosmo, sigma_8
 ###################################################################################################
 ### Luminosity -> Halo Mass from Tacchella, Trenti et al. 2015 ####################################
 def load_Tacchella_table():
@@ -55,8 +57,9 @@ def get_M_DM_range(z_analysis=5, m_max=-15, m_min=-22, delta_z=0.5):
 ###################################################################################################
 #### INITIALIZE HMF ###############################################################################
 def init_lookup_table(z, M_DM_min = 0, M_DM_max = np.inf, REWRITE_TBLS = False):
+    # TODO: change this path see GALESS
     _HERE_PATH = os.path.dirname(os.path.abspath(''))
-    FOLDERPATH = _HERE_PATH + '/data/HMF_tables/'
+    FOLDERPATH = _HERE_PATH + '/ACFHOD/acfhod/data/HMF_tables/'
     min_lnk, max_ln_k, step_lnk = -11.5, 16.6, 0.05
     if os.path.exists(FOLDERPATH):
         FPATH = FOLDERPATH+'redshift_'+str(int(z))+'_'+str(int(np.around(z%1,2)*100))+'.txt'

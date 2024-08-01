@@ -9,7 +9,7 @@ from halomod.bias import Tinker10
 import acfhod.HOD.HOD as HOD
 import acfhod.Utils.Utils as utils
 
-cosmo, sigma_8 = HOD.get_cosmology()
+cosmo, sigma_8 = utils.get_cosmology()
 c_light  = 299792.458 #speed of light km/s
 
 ###################################################################################################
