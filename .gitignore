@@ -2,3 +2,5 @@
 .DS_Store
 *.data
 *.h5
+*.egg-info
+/build
