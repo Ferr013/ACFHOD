@@ -5,7 +5,6 @@ import os
 import numpy as np
 from hmf import MassFunction
 import gzip
-import acfhod.HOD.HOD as HOD
 from astropy.cosmology import Planck15
 cosmo = Planck15
 sigma_8 = 0.8159
