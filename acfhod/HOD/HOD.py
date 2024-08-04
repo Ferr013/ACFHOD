@@ -29,6 +29,18 @@ def get_c_from_M_h(M_h, z, model='Correa'):
     log_c = alpha + beta * np.log10(M_h)
     return np.power(10, log_c)
 
+def bias_Tinker10(nu):
+    delta_halo, delta_c = 200, 1.686
+    y = np.log10(delta_halo)
+    A = 1.0 + 0.24 * y * np.exp(-((4 / y) ** 4))
+    a = 0.44 * y - 0.88
+    C = 0.019 + 0.107 * y + 0.19 * np.exp(-((4 / y) ** 4))
+    nu = np.sqrt(nu)
+    B = 0.183
+    b = 1.5
+    c = 2.4
+    return 1 - A * nu**a / (nu**a + delta_c**a) + B * nu**b + C * nu**c
+
 def u_FT(k, M_h, z, crit_dens_rescaled):
     r_v = np.power(M_h/crit_dens_rescaled, 1/3) #rho = M_sun/Mpc^3
     c   = get_c_from_M_h(M_h, z)

@@ -2,6 +2,6 @@ astropy>=5.0.0
 halomod>=2.0.0
 hmf>=3.0.0
 numpy>=1.2.0
-scipy>=1.10.0
+scipy<=1.6.3
 setuptools>=68.0.0
 tqdm>=4.0.0
