@@ -1,5 +1,4 @@
 astropy>=5.0.0
-halomod>=2.0.0
 numpy>=1.2.0
 scipy<=1.6.3
 setuptools>=68.0.0
