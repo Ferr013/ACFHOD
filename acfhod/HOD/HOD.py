@@ -4,7 +4,6 @@
 import numpy as np
 from tqdm.notebook import tqdm
 from scipy import special
-from halomod.bias import Tinker10
 import acfhod.Utils.Utils as utils
 
 cosmo, sigma_8 = utils.get_cosmology()
@@ -94,7 +93,7 @@ def get_AVG_Host_Halo_Mass(M_min, sigma_logM, M_sat, alpha, M_h_array, HMF_array
 def get_EFF_gal_bias(M_min, sigma_logM, M_sat, alpha, M_h_array, HMF_array, nu_array,
                      n_g=None, int_M_min=0, int_M_max=np.inf):
     m_mask = np.logical_and(M_h_array > int_M_min, M_h_array < int_M_max)
-    bias = Tinker10(nu=nu_array[m_mask], sigma_8 = sigma_8, cosmo = cosmo).bias()
+    bias = bias_Tinker10(nu_array[m_mask])
     NTOT = N_tot(M_h_array[m_mask], M_sat, alpha, M_min, sigma_logM)
     if n_g is not None:
         return np.trapz(bias*HMF_array[m_mask]*NTOT, M_h_array[m_mask])/n_g

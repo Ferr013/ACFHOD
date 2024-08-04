@@ -5,7 +5,6 @@
 import numpy as np
 from scipy import special
 from scipy.interpolate import splrep, splev, splint
-from halomod.bias import Tinker10
 import acfhod.HOD.HOD as HOD
 import acfhod.Utils.Utils as utils
 
@@ -68,7 +67,7 @@ def omega_z_component_1halo(z, args):
         utils.init_lookup_table(z, M_DM_min, M_DM_max, REWRITE_TBLS)
     crit_dens_rescaled = (4/3*np.pi*cosmo.critical_density(z).value*200*2e40)
     U_FT = np.array([HOD.u_FT(k, M_h_array, z, crit_dens_rescaled) for k in k_array])
-    bias = Tinker10(nu=nu_array, sigma_8 = sigma_8, cosmo = cosmo).bias()
+    bias = HOD.bias_Tinker10(nu_array)
     comoving_distance_z = cosmo.comoving_distance(z).value
     return omega_inner_integral_1halo(theta, comoving_distance_z, M_h_array, HMF_array,
                                       NCEN, NSAT, U_FT, k_array, bias, STEP_J0)
@@ -79,7 +78,7 @@ def omega_z_component_2halo(z, args):
         utils.init_lookup_table(z, M_DM_min, M_DM_max, REWRITE_TBLS)
     crit_dens_rescaled = (4/3*np.pi*cosmo.critical_density(z).value*200*2e40)
     U_FT = np.array([HOD.u_FT(k, M_h_array, z, crit_dens_rescaled) for k in k_array])
-    bias = Tinker10(nu=nu_array, sigma_8 = sigma_8, cosmo = cosmo).bias()
+    bias = HOD.bias_Tinker10(nu_array)
     comoving_distance_z = cosmo.comoving_distance(z).value
     return omega_inner_integral_2halo(theta, comoving_distance_z, M_h_array, HMF_array,
                                       NCEN, NSAT, U_FT, k_array, hmf_PS, bias)
@@ -90,7 +89,7 @@ def omega_z_component_1_and_2halo(z, args):
         utils.init_lookup_table(z, M_DM_min, M_DM_max, REWRITE_TBLS)
     crit_dens_rescaled = (4/3*np.pi*cosmo.critical_density(z).value*200*2e40)
     U_FT = np.array([HOD.u_FT(k, M_h_array, z, crit_dens_rescaled) for k in k_array])
-    bias = Tinker10(nu=nu_array, sigma_8 = sigma_8, cosmo = cosmo).bias()
+    bias = HOD.bias_Tinker10(nu_array)
     comoving_distance_z = cosmo.comoving_distance(z).value
     o1 = omega_inner_integral_1halo(theta, comoving_distance_z, M_h_array, HMF_array,
                                     NCEN, NSAT, U_FT, k_array, bias, STEP_J0)
