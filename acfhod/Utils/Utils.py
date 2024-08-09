@@ -7,7 +7,7 @@ from hmf import MassFunction
 import gzip
 from astropy.cosmology import Planck15
 
-BASEPATH = os.path.dirname(os.path.abspath(__file__)) + '/../data/'
+BASEPATH = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'data/')
 
 cosmo = Planck15
 sigma_8 = 0.8159
