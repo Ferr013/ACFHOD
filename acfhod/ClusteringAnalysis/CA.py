@@ -14,6 +14,28 @@ c_light  = 299792.458 #speed of light km/s
 ###################################################################################################
 ### CLUSTERING ANALYSIS ###########################################################################
 
+def calc_1halo_integral(t, j_0_zeros, k_array, comoving_distance_z,
+                        PS_1_spl, STEP_J0, DELTA_J0, RES_J0, SPL_ORDER):
+    res = 0
+    k0 = j_0_zeros[0]/t/comoving_distance_z
+    k_here = np.append(k_array[k_array<k0], k0)
+    PS_1_here = splev(k_here, PS_1_spl)
+    Bessel = np.array([special.j0(k*t*comoving_distance_z) for k in k_here])
+    integrand = PS_1_here * k_here / (2*np.pi) * Bessel
+    A_sp = splrep(k_here, integrand, s=0, k=SPL_ORDER)
+    res += splint(k_here[0], k_here[-1], A_sp)
+    i = 0
+    while i <= STEP_J0 - DELTA_J0:
+        j_array = np.linspace(j_0_zeros[i], j_0_zeros[i+DELTA_J0], DELTA_J0*RES_J0)
+        k_here = j_array / t / comoving_distance_z
+        PS_1_here = splev(k_here, PS_1_spl)
+        Bessel = np.array([special.j0(k*t*comoving_distance_z) for k in k_here])
+        integrand = PS_1_here * k_here / (2*np.pi) * Bessel
+        A_sp = splrep(k_here, integrand, s=0, k=SPL_ORDER)
+        res += splint(k_here[0], k_here[-1], A_sp)
+        i += DELTA_J0
+    return res
+
 def omega_inner_integral_1halo(theta,
                                comoving_distance_z,
                                M_h_array, HMF_array,
@@ -24,26 +46,9 @@ def omega_inner_integral_1halo(theta,
     N1   = np.max(PS_1)
     PS_1 = PS_1 / N1
     PS_1_spl = splrep(k_array, PS_1  , s=0, k=SPL_ORDER)
-    R_T1 = np.zeros(len(theta))
     j_0_zeros = special.jn_zeros(0, STEP_J0+1)
-    for it, t in enumerate(theta):
-        k0 = j_0_zeros[0]/t/comoving_distance_z
-        k_here = np.append(k_array[k_array<k0], k0)
-        PS_1_here = splev(k_here, PS_1_spl)
-        Bessel = np.array([special.j0(k*t*comoving_distance_z) for k in k_here])
-        integrand = PS_1_here * k_here / (2*np.pi) * Bessel
-        A_sp = splrep(k_here, integrand, s=0, k=SPL_ORDER)
-        R_T1[it] += splint(k_here[0], k_here[-1], A_sp)
-        i = 0
-        while i <= STEP_J0 - DELTA_J0:
-            j_array = np.linspace(j_0_zeros[i], j_0_zeros[i+DELTA_J0], DELTA_J0*RES_J0)
-            k_here = j_array / t / comoving_distance_z
-            PS_1_here = splev(k_here, PS_1_spl)
-            Bessel = np.array([special.j0(k*t*comoving_distance_z) for k in k_here])
-            integrand = PS_1_here * k_here / (2*np.pi) * Bessel
-            A_sp = splrep(k_here, integrand, s=0, k=SPL_ORDER)
-            R_T1[it] += splint(k_here[0], k_here[-1], A_sp)
-            i += DELTA_J0
+    R_T1 = np.array([calc_1halo_integral(t, j_0_zeros, k_array, comoving_distance_z,\
+                    PS_1_spl, STEP_J0, DELTA_J0, RES_J0, SPL_ORDER) for t in theta])
     return R_T1 * N1
 
 def omega_inner_integral_2halo(theta,
