@@ -17,7 +17,7 @@ def get_cosmology():
 ###################################################################################################
 ### Luminosity -> Halo Mass from Tacchella, Trenti et al. 2015 ####################################
 def load_Tacchella_table():
-    file_path = r"Trenti_15.dat.gz"
+    file_path = BASEPATH + "Tacchella_Trenti_Carollo_15.dat.gz"
     z, p, mag_d, mag, Mstar, Mdm, N = [], [], [], [], [], [], []
     with gzip.open(file_path, 'rt') as file:
         for line in file:
@@ -46,9 +46,9 @@ def get_M_DM_range(z_analysis=5, m_max=-15, m_min=-22, delta_z=0.5):
         mag_max, mag_min = _m_max + _distmd, _m_min + _distmd
     idx = np.where((z>=zmin) & (z<zmax) & (p==max(p)) & (mag<mag_max) & (mag>mag_min))[0]
     if len(idx) < 2:
-        # if VERBOSE: print('The redshift and/or mass interval requested are not in the lookup table')
+        # print('The redshift and/or mass interval requested are not in the lookup table')
         if z_analysis > 1:
-            # if VERBOSE: print('Trying z-0.5 --> z : ', z_analysis - 0.5)
+            # print('Trying z-0.5 --> z : ', z_analysis - 0.5)
             return get_M_DM_range(z_analysis - 1, m_max, m_min, delta_z)
         return -99, -99
     magg, mmdm = mag[idx], Mdm[idx]

@@ -153,4 +153,3 @@ def omega_1_and_2halo(theta, M_min, sigma_logM, M_sat, alpha, N_z_nrm, z_array,
     I1 = np.array([np.trapz(itg[:,0,i] * factor_z, z_array) for i in range(len(theta))])
     I2 = np.array([np.trapz(itg[:,1,i] * factor_z, z_array) for i in range(len(theta))])
     return I1/ np.power(N_G, 2), I2/ np.power(N_G, 2)
-
