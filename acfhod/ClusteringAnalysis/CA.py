@@ -117,8 +117,8 @@ def omega_1halo(theta, M_min, sigma_logM, M_sat, alpha, N_z_nrm, z_array,
     args = theta, M_DM_min, M_DM_max, NCEN, NSAT, REWRITE_TBLS, STEP_J0
     itg = np.array([omega_z_component_1halo(z, args) for z in z_array])
     N_G = HOD.get_N_dens_avg(z_array, M_min, sigma_logM, M_sat, alpha, N_z_nrm,
-                             int_M_min=np.power(10, M_DM_min),
-                             int_M_max=np.power(10, M_DM_max))
+                             int_M_min=M_DM_min,
+                             int_M_max=M_DM_max)
     I1 = np.array([np.trapz(itg[:,i] * factor_z, z_array) for i in range(len(theta))])
     return I1/ np.power(N_G, 2)
 
@@ -137,8 +137,8 @@ def omega_2halo(theta, M_min, sigma_logM, M_sat, alpha, N_z_nrm, z_array,
     args = theta, M_DM_min, M_DM_max, NCEN, NSAT, REWRITE_TBLS
     itg = np.array([omega_z_component_2halo(z, args) for z in z_array])
     N_G = HOD.get_N_dens_avg(z_array, M_min, sigma_logM, M_sat, alpha, N_z_nrm,
-                             int_M_min=np.power(10, M_DM_min),
-                             int_M_max=np.power(10, M_DM_max))
+                             int_M_min=M_DM_min,
+                             int_M_max=M_DM_max)
     I2 = np.array([np.trapz(itg[:,i] * factor_z, z_array) for i in range(len(theta))])
     return I2/ np.power(N_G, 2)
 
@@ -158,8 +158,8 @@ def omega_1_and_2halo(theta, M_min, sigma_logM, M_sat, alpha, N_z_nrm, z_array,
     itg  = np.array([omega_z_component_1_and_2halo(z, args) for z in z_array])
     itg1, itg2 = itg[:,0], itg[:,1] #TODO: Check this
     N_G = HOD.get_N_dens_avg(z_array, M_min, sigma_logM, M_sat, alpha, N_z_nrm,
-                             int_M_min=np.power(10, M_DM_min),
-                             int_M_max=np.power(10, M_DM_max))
+                             int_M_min=M_DM_min,
+                             int_M_max=M_DM_max)
     I1 = np.array([np.trapz(itg1[:,i] * factor_z, z_array) for i in range(len(theta))])
     I2 = np.array([np.trapz(itg2[:,i] * factor_z, z_array) for i in range(len(theta))])
     return I1/ np.power(N_G, 2), I2/ np.power(N_G, 2)

@@ -78,9 +78,8 @@ def get_N_dens_avg(z_array, M_min, sigma_logM, M_sat, alpha, N_z_nrm,
         M_h_array, HMF_array, _, __, ___ = utils.init_lookup_table(z,
                                                                    M_DM_min = int_M_min,
                                                                    M_DM_max = int_M_max)
-        m_mask = np.logical_and(M_h_array > int_M_min, M_h_array < int_M_max)
         _N_G  = np.append(_N_G, gal_density_n_g(M_min, sigma_logM, M_sat, alpha,
-                                                M_h_array[m_mask], HMF_array[m_mask], DC))
+                                                M_h_array, HMF_array, DC))
         _dVdz = np.append(_dVdz, cosmo.comoving_distance(z).value**2 * c_light / cosmo.H(z).value)
     return np.trapz(_N_G * _dVdz * N_z_nrm, z_array)/np.trapz(_dVdz * N_z_nrm, z_array)
 
