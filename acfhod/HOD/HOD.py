@@ -29,7 +29,7 @@ def get_c_from_M_h(M_h, z, model='Correa'):
     log_c = alpha + beta * np.log10(M_h)
     return np.power(10, log_c)
 
-def bias_Tinker10(nu):
+def linear_bias_Tinker10(nu):
     delta_halo, delta_c = 200, 1.686
     y = np.log10(delta_halo)
     A = 1.0 + 0.24 * y * np.exp(-((4 / y) ** 4))
@@ -40,6 +40,12 @@ def bias_Tinker10(nu):
     b = 1.5
     c = 2.4
     return 1 - A * nu**a / (nu**a + delta_c**a) + B * nu**b + C * nu**c
+
+def bias_non_linear_factor_Jose16():
+    return 1.0
+
+def non_linear_bias_correction_Jose16(nu):
+    return linear_bias_Tinker10(nu) * bias_non_linear_factor_Jose16()
 
 def u_FT(k, M_h, z, crit_dens_rescaled):
     r_v = np.power(M_h/crit_dens_rescaled, 1/3) #rho = M_sun/Mpc^3
@@ -104,7 +110,7 @@ def get_AVG_Host_Halo_Mass(M_min, sigma_logM, M_sat, alpha, M_h_array, HMF_array
 def get_EFF_gal_bias(M_min, sigma_logM, M_sat, alpha, M_h_array, HMF_array, nu_array,
                      n_g=None, int_M_min=0, int_M_max=np.inf):
     m_mask = np.logical_and(M_h_array > int_M_min, M_h_array < int_M_max)
-    bias = bias_Tinker10(nu_array[m_mask])
+    bias = linear_bias_Tinker10(nu_array[m_mask])
     NTOT = N_tot(M_h_array[m_mask], M_sat, alpha, M_min, sigma_logM)
     if n_g is not None:
         return np.trapz(bias*HMF_array[m_mask]*NTOT, M_h_array[m_mask])/n_g

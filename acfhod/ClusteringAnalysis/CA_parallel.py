@@ -16,6 +16,13 @@ import acfhod.ClusteringAnalysis.CA as CA
 cosmo, sigma_8 = utils.get_cosmology()
 c_light  = 299792.458 #speed of light km/s
 
+NON_LINEAR_BIAS = True
+
+def set_NON_LINEAR_BIAS(flag_boolean = True):
+    global NON_LINEAR_BIAS
+    NON_LINEAR_BIAS = flag_boolean
+    return
+
 ###################################################################################################
 ### CLUSTERING ANALYSIS PARALLEL CODE #############################################################
 
@@ -78,7 +85,7 @@ def omega_z_component_single(args):
         utils.init_lookup_table(z, M_DM_min, M_DM_max, REWRITE_TBLS)
     crit_dens_rescaled = (4/3*np.pi*cosmo.critical_density(z).value*200*2e40)
     U_FT = np.array([HOD.u_FT(k, M_h_array, z, crit_dens_rescaled) for k in k_array])
-    bias = HOD.bias_Tinker10(nu_array)
+    bias = HOD.linear_bias_Tinker10(nu_array) if not NON_LINEAR_BIAS else HOD.non_linear_bias_correction_Jose16(nu_array)
     comoving_distance_z = cosmo.comoving_distance(z).value
     shres[job_id, 0, :], shres[job_id, 1, :] = omega_inner_integral(theta,
                                                 comoving_distance_z,
